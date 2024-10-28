@@ -1,6 +1,7 @@
 # --- Importing Packages ---
 import sys
 import pygame
+import random
 
 from config import *
 
@@ -11,6 +12,7 @@ snake_head_x = WIN_WIDTH // 2
 snake_head_y = WIN_HEIGHT // 2
 snake_dir_x = 1
 snake_dir_y = 0
+
 
 # --- Initializing Pygame and Setting Clock---
 pygame.init()
@@ -32,16 +34,16 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_s:
+            if event.key == pygame.K_s and snake_dir_y != -1:
                 snake_dir_x = 0
                 snake_dir_y = 1
-            if event.key == pygame.K_w:
+            if event.key == pygame.K_w and snake_dir_y != 1:
                 snake_dir_x = 0
                 snake_dir_y = -1
-            if event.key == pygame.K_a:
+            if event.key == pygame.K_a and snake_dir_x != 1:
                 snake_dir_x = -1
                 snake_dir_y = 0
-            if event.key == pygame.K_d:
+            if event.key == pygame.K_d and snake_dir_x != -1:
                 snake_dir_x = 1
                 snake_dir_y = 0
 
