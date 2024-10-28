@@ -34,6 +34,8 @@ new_game_txt = font.render(" Press any key to start ", True, SCORE_COLOR)
 new_game_rect = new_game_txt.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
 game_over_txt = font.render(" Game Over. Score: " + str(score) + " . Press any key to start new game", True, SCORE_COLOR)
 game_over_rect = game_over_txt.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
+# game sounds
+pick_sound = pygame.mixer.Sound(PICK_SOUND_PATH)
 # snake
 snake_head_coord = (snake_head_x, snake_head_y, SNAKE_SIZE, SNAKE_SIZE)
 snake_head_rect = pygame.draw.rect(WIN, SNAKE_COLOR, snake_head_coord)
@@ -106,6 +108,7 @@ while running:
     # Checking snake head and food collision
     if snake_head_rect.colliderect(food_rect):
         score += 1
+        pick_sound.play()
         score_txt = font.render("Score: " + str(score), True, SCORE_COLOR)
         food_x = random.randint(1, WIN_WIDTH - FOOD_SIZE)
         food_y = random.randint(1, WIN_HEIGHT - FOOD_SIZE)
