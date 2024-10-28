@@ -16,10 +16,11 @@ snake_body = []
 food_x = random.randint(1, WIN_WIDTH - FOOD_SIZE)
 food_y = random.randint(1, WIN_HEIGHT - FOOD_SIZE)
 
-
 # --- Initializing Pygame and Setting Clock---
 pygame.init()
 WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+pygame.display.set_caption(TITLE)
+pygame.display.set_icon(pygame.image.load(ICON_PATH))
 clock = pygame.time.Clock()
 
 # --- Building In-Game Assets ---
@@ -39,19 +40,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_s and snake_dir_y != -1:
+            if (event.key in (pygame.K_s, pygame.K_DOWN)) and snake_dir_y != -1:
                 snake_dir_x = 0
                 snake_dir_y = 1
-            if event.key == pygame.K_w and snake_dir_y != 1:
+            if (event.key in (pygame.K_w, pygame.K_UP)) and snake_dir_y != 1:
                 snake_dir_x = 0
                 snake_dir_y = -1
-            if event.key == pygame.K_a and snake_dir_x != 1:
+            if (event.key in (pygame.K_a, pygame.K_LEFT)) and snake_dir_x != 1:
                 snake_dir_x = -1
                 snake_dir_y = 0
-            if event.key == pygame.K_d and snake_dir_x != -1:
+            if (event.key in (pygame.K_d, pygame.K_RIGHT)) and snake_dir_x != -1:
                 snake_dir_x = 1
                 snake_dir_y = 0
 
+    # Adding head coordinate to the first index of the body coordinate list
+    # This will essentially move all the snakes body by one position in the list
     snake_body.insert(0, snake_head_coord)
     snake_body.pop(-1)
 
@@ -61,7 +64,13 @@ while running:
     snake_head_coord = (snake_head_x, snake_head_y, SNAKE_SIZE, SNAKE_SIZE)
 
     # Checking for wall collision and body collision
-    if snake_head_rect.left <= 0 or snake_head_rect.right >= WIN_WIDTH or snake_head_rect.top <= 0 or snake_head_rect.bottom >= WIN_HEIGHT or snake_head_coord in snake_body[1:]:
+    if (
+            snake_head_rect.left <= 0
+            or snake_head_rect.right >= WIN_WIDTH
+            or snake_head_rect.top <= 0
+            or snake_head_rect.bottom >= WIN_HEIGHT
+            or snake_head_coord in snake_body[1:]
+    ):
         print("Game Over")
         running = False
 
@@ -73,14 +82,13 @@ while running:
         food_y = random.randint(1, WIN_HEIGHT - FOOD_SIZE)
         snake_body.append(snake_head_coord)
 
-
     # Updating game window
     WIN.fill(BACKGROUND_COLOR)
-    WIN.blit(score_txt, score_rect)
     food_rect = pygame.draw.rect(WIN, FOOD_COLOR, (food_x, food_y, FOOD_SIZE, FOOD_SIZE))
     for body_coord in snake_body:
         pygame.draw.rect(WIN, SNAKE_COLOR, body_coord)
-    snake_head_rect = pygame.draw.rect(WIN, SNAKE_COLOR, (snake_head_x, snake_head_y, SNAKE_SIZE, SNAKE_SIZE))
+    snake_head_rect = pygame.draw.rect(WIN, SNAKE_COLOR, snake_head_coord)
+    WIN.blit(score_txt, score_rect)
     pygame.display.update()
     clock.tick(FPS)
 

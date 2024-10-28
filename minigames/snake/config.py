@@ -8,6 +8,8 @@ FOOD_COLOR = (255, 255, 255)
 WIN_WIDTH = 700
 WIN_HEIGHT = 700
 FPS = 10
+TITLE = "Snake Game"
+ICON_PATH = "assets/images/snake-icon.png"
 
 SCORE_COLOR = (255, 255, 255)
 SCORE_SIZE = 15
