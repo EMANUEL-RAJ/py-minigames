@@ -60,6 +60,11 @@ while running:
     snake_head_y += (snake_dir_y * SNAKE_SIZE)
     snake_head_coord = (snake_head_x, snake_head_y, SNAKE_SIZE, SNAKE_SIZE)
 
+    # Checking for wall collision and body collision
+    if snake_head_rect.left <= 0 or snake_head_rect.right >= WIN_WIDTH or snake_head_rect.top <= 0 or snake_head_rect.bottom >= WIN_HEIGHT or snake_head_coord in snake_body[1:]:
+        print("Game Over")
+        running = False
+
     # Checking snake head and food collision
     if snake_head_rect.colliderect(food_rect):
         score += 1
@@ -68,10 +73,6 @@ while running:
         food_y = random.randint(1, WIN_HEIGHT - FOOD_SIZE)
         snake_body.append(snake_head_coord)
 
-    # Checking for wall collision and body collision
-    if snake_head_rect.left <= 0 or snake_head_rect.right >= WIN_WIDTH or snake_head_rect.top <= 0 or snake_head_rect.bottom >= WIN_HEIGHT or snake_head_coord in snake_body:
-        print("Game Over")
-        running = False
 
     # Updating game window
     WIN.fill(BACKGROUND_COLOR)
