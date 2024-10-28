@@ -7,6 +7,8 @@ from config import *
 
 # --- Game Variables ---
 running = True
+new_game = True
+game_over = False
 score = 0
 snake_head_x = WIN_WIDTH // 2
 snake_head_y = WIN_HEIGHT // 2
@@ -28,6 +30,10 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont("freesansbold", 15)
 score_txt = font.render("Score: " + str(score), True, SCORE_COLOR)
 score_rect = score_txt.get_rect(topleft=SCORE_RECT)
+new_game_txt = font.render(" Press any key to start ", True, SCORE_COLOR)
+new_game_rect = new_game_txt.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
+game_over_txt = font.render(" Game Over. Score: " + str(score) + " . Press any key to start new game", True, SCORE_COLOR)
+game_over_rect = game_over_txt.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 2))
 # snake
 snake_head_coord = (snake_head_x, snake_head_y, SNAKE_SIZE, SNAKE_SIZE)
 snake_head_rect = pygame.draw.rect(WIN, SNAKE_COLOR, snake_head_coord)
@@ -36,6 +42,29 @@ food_rect = pygame.draw.rect(WIN, FOOD_COLOR, (food_x, food_y, FOOD_SIZE, FOOD_S
 
 # --- Main Game Loop ---
 while running:
+    while new_game:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                new_game = False
+        WIN.fill(BACKGROUND_COLOR)
+        WIN.blit(new_game_txt, new_game_rect)
+        pygame.display.update()
+    while game_over:
+        WIN.fill(BACKGROUND_COLOR)
+        WIN.blit(game_over_txt, game_over_rect)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                score = 0
+                snake_head_x = WIN_WIDTH // 2
+                snake_head_y = WIN_HEIGHT // 2
+                snake_dir_x = 1
+                snake_dir_y = 0
+                snake_body = []
+                food_x = random.randint(1, WIN_WIDTH - FOOD_SIZE)
+                food_y = random.randint(1, WIN_HEIGHT - FOOD_SIZE)
+                game_over = False
+        pygame.display.update()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -71,8 +100,8 @@ while running:
             or snake_head_rect.bottom >= WIN_HEIGHT
             or snake_head_coord in snake_body[1:]
     ):
-        print("Game Over")
-        running = False
+        game_over = True
+        game_over_txt = font.render(" Game Over. Score: " + str(score) + " . Press any key to start new game", True, SCORE_COLOR)
 
     # Checking snake head and food collision
     if snake_head_rect.colliderect(food_rect):
