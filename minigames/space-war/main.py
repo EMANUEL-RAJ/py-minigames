@@ -98,7 +98,12 @@ class Player(pygame.sprite.Sprite):
         """
         Updates the player
         """
-        pass
+        keys = pygame.key.get_pressed()
+        # moving player within bounds of window
+        if keys[pygame.K_d] and self.rect.right < WIN_WIDTH:
+            self.rect.x += self.velocity
+        if keys[pygame.K_a] and self.rect.left > 0:
+            self.rect.x -= self.velocity
 
     def fire(self):
         """
@@ -110,7 +115,7 @@ class Player(pygame.sprite.Sprite):
         """
         Resets the player position
         """
-        pass
+        self.rect.centerx = WIN_WIDTH // 2
 
 
 class Alien(pygame.sprite.Sprite):
