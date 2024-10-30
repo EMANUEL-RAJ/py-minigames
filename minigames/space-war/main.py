@@ -81,12 +81,18 @@ class Player(pygame.sprite.Sprite):
     Class to model and control the player ship
     """
 
-    def __init__(self):
+    def __init__(self, player_bullet_group):
         """
         Initializing the player
         """
         super().__init__()
-        pass
+        self.player_bullet_group = player_bullet_group
+        self.image = pygame.image.load(SHIP_PATH)
+        self.rect = self.image.get_rect(centerx=WIN_WIDTH //2, bottom=WIN_HEIGHT - 5)
+        self.lives = 5
+        self.velocity = 8
+        self.shoot_sound = pygame.mixer.Sound(SHIP_FIRE_SOUND_PATH)
+
 
     def update(self):
         """
@@ -176,6 +182,21 @@ class AlienBullet(pygame.sprite.Sprite):
         pass
 
 
+# --- creating bullet sprite groups ---
+player_bullet_group = pygame.sprite.Group()
+alien_bullet_group = pygame.sprite.Group()
+
+# --- creating player object and sprite group
+player_group = pygame.sprite.Group()
+player = Player(player_bullet_group)  # passing player bullet group
+player_group.add(player)
+
+# --- creating alien group and alien objects will be added inside Game class
+alien_group = pygame.sprite.Group()
+
+# --- creating Game object ---
+game = Game()
+
 # --- main game loop ---
 running = True
 while running:
@@ -183,6 +204,24 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    # filling window
+    window.fill(BLACK)
+    # update and display all sprite groups
+    player_group.update()
+    player_group.draw(window)
+
+    alien_group.update()
+    alien_group.draw(window)
+
+    player_bullet_group.update()
+    player_bullet_group.draw(window)
+
+    alien_bullet_group.update()
+    alien_bullet_group.draw(window)
+
+    # update and draw game object
+    game.update()
+    game.draw()
 
     pygame.display.update()
     clock.tick(FPS)

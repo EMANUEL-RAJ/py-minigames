@@ -2,6 +2,9 @@
 File containing the global constants for space-war game
 """
 
+# colors
+BLACK = (0, 0, 0)
+
 # display and clock constants
 WIN_WIDTH = 1200
 WIN_HEIGHT = 700
@@ -16,3 +19,5 @@ SHIP_SIZE = (64, 64)
 
 ALIEN_PATH = "assets/images/alien.png"
 ALIEN_SIZE = (64, 64)
+
+SHIP_FIRE_SOUND_PATH = "assets/sounds/player_fire.wav"
