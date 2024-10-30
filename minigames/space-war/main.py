@@ -88,11 +88,10 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.player_bullet_group = player_bullet_group
         self.image = pygame.image.load(SHIP_PATH)
-        self.rect = self.image.get_rect(centerx=WIN_WIDTH //2, bottom=WIN_HEIGHT - 5)
+        self.rect = self.image.get_rect(centerx=WIN_WIDTH // 2, bottom=WIN_HEIGHT - 5)
         self.lives = 5
         self.velocity = 8
         self.shoot_sound = pygame.mixer.Sound(SHIP_FIRE_SOUND_PATH)
-
 
     def update(self):
         """
@@ -109,7 +108,10 @@ class Player(pygame.sprite.Sprite):
         """
         Fires a laser beam
         """
-        pass
+        # restricting the number of bullets on screen at a time
+        if len(self.player_bullet_group) < 2:
+            self.shoot_sound.play()
+            PlayerBullet(self.rect.centerx, self.rect.top, self.player_bullet_group)
 
     def reset(self):
         """
@@ -154,18 +156,27 @@ class PlayerBullet(pygame.sprite.Sprite):
     Class to model a bullet fired by the player ship
     """
 
-    def __init__(self):
+    def __init__(self, player_x_pos, player_y_pos, bullet_group):
         """
         Initializing the player bullet
         """
         super().__init__()
-        pass
+        self.image = pygame.image.load(GREEN_BULLET_PATH)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = player_x_pos
+        self.rect.centery = player_y_pos
+        self.velocity = 10
+
+        bullet_group.add(self)  # adding bullet to bullet group
 
     def update(self):
         """
         Updates the bullet
         """
-        pass
+        self.rect.centery -= self.velocity
+        # removing bullet if it goes off the screen
+        if self.rect.bottom < 0:
+            self.kill()
 
 
 class AlienBullet(pygame.sprite.Sprite):
@@ -209,6 +220,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        # player fires
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player.fire()
+
     # filling window
     window.fill(BLACK)
     # update and display all sprite groups
