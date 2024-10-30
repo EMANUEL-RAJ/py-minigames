@@ -111,7 +111,7 @@ class Player(pygame.sprite.Sprite):
         # restricting the number of bullets on screen at a time
         if len(self.player_bullet_group) < 2:
             self.shoot_sound.play()
-            PlayerBullet(self.rect.centerx, self.rect.top, self.player_bullet_group)
+            PlayerBullet(self.rect.centerx, self.rect.centery, self.player_bullet_group)
 
     def reset(self):
         """
@@ -228,14 +228,14 @@ while running:
     # filling window
     window.fill(BLACK)
     # update and display all sprite groups
+    player_bullet_group.update()
+    player_bullet_group.draw(window)
+
     player_group.update()
     player_group.draw(window)
 
     alien_group.update()
     alien_group.draw(window)
-
-    player_bullet_group.update()
-    player_bullet_group.draw(window)
 
     alien_bullet_group.update()
     alien_bullet_group.draw(window)
