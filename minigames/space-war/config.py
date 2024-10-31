@@ -21,5 +21,6 @@ ALIEN_PATH = "assets/images/alien.png"
 ALIEN_SIZE = (64, 64)
 
 SHIP_FIRE_SOUND_PATH = "assets/sounds/player_fire.wav"
+ALIEN_FIRE_SOUND_PATH = "assets/sounds/alien_fire.wav"
 
 GREEN_BULLET_PATH = "assets/images/green-beam.png"

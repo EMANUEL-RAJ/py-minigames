@@ -125,18 +125,37 @@ class Alien(pygame.sprite.Sprite):
     Class to model and control the enemy alien
     """
 
-    def __init__(self):
+    def __init__(self, x_pos, y_pos, velocity, alien_bullet_group):
         """
         Initializing the alien
         """
         super().__init__()
-        pass
+        self.image = pygame.image.load(ALIEN_PATH)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x_pos, y_pos)
+
+        # storing starting position in case of level reset
+        self.starting_x_pos = x_pos
+        self.starting_y_pos = y_pos
+
+        # direction in which the alien moves - horizontal movement
+        self.direction = 1
+
+        self.velocity = velocity
+        self.alien_bullet_group = alien_bullet_group
+        self.shoot_sound = pygame.mixer.Sound(ALIEN_FIRE_SOUND_PATH)
 
     def update(self):
         """
         Updates the alien
         """
-        pass
+        self.rect.x += (self.velocity * self.velocity)
+
+        # randomly fires a bullet
+        # 0.1% chance times 60 times a second for every alien
+        if random.randint(0, 1000) > 999 and len(self.alien_bullet_group) < 4:
+            self.shoot_sound.play()
+            self.fire()
 
     def fire(self):
         """
@@ -148,7 +167,8 @@ class Alien(pygame.sprite.Sprite):
         """
         Resets the alien position
         """
-        pass
+        self.rect.topleft = (self.starting_x_pos, self.starting_y_pos)
+        self.direction = 1
 
 
 class PlayerBullet(pygame.sprite.Sprite):
@@ -209,6 +229,10 @@ player_group.add(player)
 
 # --- creating alien group and alien objects will be added inside Game class
 alien_group = pygame.sprite.Group()
+# testing with aliens - to be deleted
+for i in range(10):
+    alien = Alien((64 * i), 100, 2, alien_bullet_group)
+    alien_group.add(alien)
 
 # --- creating Game object ---
 game = Game()
