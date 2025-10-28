@@ -6,8 +6,7 @@ import time
 import random
 import pygame
 from libs.logger.game_logger import logger
-from .constants import WINDOW_WIDTH, WINDOW_HEIGHT, BALL_RADIUS, BALL_COLOR, BALL_INIT_X_VELOCITY, \
-    BALL_INIT_Y_VELOCITY, BALL_RESET_DELAY, BALL_SPEED
+from .constants import WINDOW_WIDTH, WINDOW_HEIGHT, BALL_RADIUS, BALL_COLOR, BALL_RESET_DELAY, BALL_SPEED
 
 
 # ---------------------------------------------------------------------------
@@ -22,6 +21,7 @@ class Ball:
         pygame.init()
         self.display_surface = display_surface
         self.ball_rect = None
+        self.reset_time = time.time()
         self.reset()
 
     def _calculate_velocity(self):
@@ -45,7 +45,7 @@ class Ball:
         )
         self._calculate_velocity()
         logger.info("Ball reset to center with velocity (%d, %d)", self.x_velocity, self.y_velocity)
-        time.sleep(BALL_RESET_DELAY)
+        # time.sleep(BALL_RESET_DELAY)
 
     def move(self) -> None:
         """Move the ball and handle wall collisions."""

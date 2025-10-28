@@ -31,7 +31,8 @@ class PongGame:
         self.is_running = True
 
         # Initialize objects
-        self.player_paddle = Paddle(self.display_surface)
+        self.player_paddle = Paddle(self.display_surface, (WINDOW_HEIGHT - 40))
+        self.bot_paddle = Paddle(self.display_surface, 40)
         self.ball = Ball(self.display_surface)
 
         logger.info("PongGame initialized with window size %sx%s", WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -82,8 +83,10 @@ class PongGame:
         """Handle collisions between the ball and paddle."""
         if self.ball.ball_rect.colliderect(self.player_paddle.rect):
             self.ball.bounce()
-            # Optional: modify bounce angle based on paddle movement
-            logger.debug("Collision detected between ball and paddle")
+            logger.debug("Collision detected between ball and player paddle")
+        if self.ball.ball_rect.colliderect(self.bot_paddle.rect):
+            self.ball.bounce()
+            logger.debug("Collision detected between ball and bot paddle")
 
     # -----------------------------------------------------------------------
     # Rendering
@@ -93,6 +96,8 @@ class PongGame:
         """Render all visual elements on the display surface."""
         self.display_surface.fill(BACKGROUND_COLOR)
         self.player_paddle.draw()
+        self.bot_paddle.draw()
+        self.bot_paddle.follow(self.ball)
         self.ball.draw()
         pygame.display.flip()
 

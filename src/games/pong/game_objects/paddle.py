@@ -1,6 +1,7 @@
 """
 Module contains paddle class
 """
+import random
 import pygame
 
 from libs.logger.game_logger import logger
@@ -14,15 +15,25 @@ from .constants import WINDOW_WIDTH, WINDOW_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT,
 class Paddle:
     """Represents the player paddle and handles its movement and rendering."""
 
-    def __init__(self, display_surface: pygame.Surface) -> None:
+    def __init__(self, display_surface: pygame.Surface, y_position) -> None:
         """Initialize the paddle object."""
         pygame.init()
         self.display_surface = display_surface
         self.rect = pygame.Rect(
-            (WINDOW_WIDTH // 2 - PADDLE_WIDTH // 2, WINDOW_HEIGHT - 40),
+            (WINDOW_WIDTH // 2 - PADDLE_WIDTH // 2, y_position),
             (PADDLE_WIDTH, PADDLE_HEIGHT),
         )
         self.speed: int = PADDLE_SPEED
+        self.tolerance = 20
+
+    def follow(self, ball):
+        self.tolerance = random.randint(20, 35)
+        if self.rect.centerx - self.tolerance > ball.ball_rect.centerx:
+            self.rect.centerx -= self.speed
+        elif self.rect.centerx + self.tolerance < ball.ball_rect.centerx:
+            self.rect.centerx += self.speed
+
+        self.rect.x = max(0, min(self.rect.x, WINDOW_WIDTH - self.rect.width))
 
     def move_left(self) -> None:
         """Move the paddle left within window boundaries."""
