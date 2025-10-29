@@ -8,7 +8,13 @@ from .paddle import Paddle
 
 
 class Game:
+    """
+    Game class that keeps track of game loop and components
+    """
     def __init__(self):
+        """
+        Initializes the game components
+        """
         pygame.init()
         pygame.display.set_caption(GAME_TITLE)
         self.running = True
@@ -17,7 +23,11 @@ class Game:
         self.player = Paddle(self, self.screen, PLAYER_PAD_POSITION)
         self.bot = Paddle(self, self.screen, BOT_PAD_POSITION)
 
-    def _handle_events(self):
+    def _handle_events(self) -> None:
+        """
+        Handles game events
+        :return: None
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -29,10 +39,18 @@ class Game:
         if keys[pygame.K_RIGHT]:
             self.player.move_right()
 
-    def _update(self):
+    def _update(self) -> None:
+        """
+        Updates the game components
+        :return: None
+        """
         pygame.display.update()
 
-    def _render(self):
+    def _render(self) -> None:
+        """
+        Renders the screen, paddles and ball
+        :return: None
+        """
         self.screen.fill(GAME_BG_CLR)
         pygame.draw.line(self.screen, GAME_OBJ_CLR, SCREEN_DIV[0], SCREEN_DIV[1], 1)
         self.player.render()
