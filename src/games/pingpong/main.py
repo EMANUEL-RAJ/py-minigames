@@ -20,8 +20,8 @@ class Game:
         self.running = True
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT))
-        self.player = Paddle(self, self.screen, PLAYER_PAD_POSITION)
-        self.bot = Paddle(self, self.screen, BOT_PAD_POSITION)
+        self.player = Paddle(self.screen, PLAYER_PAD_POSITION, PLAYER_SCORE_POSITION)
+        self.bot = Paddle(self.screen, BOT_PAD_POSITION, BOT_SCORE_POSITION)
 
     def _handle_events(self) -> None:
         """
